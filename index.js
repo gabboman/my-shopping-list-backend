@@ -69,7 +69,7 @@ app.post('/createList', function (req, res) {
     bcrypt.hash(req.body.password, saltRounds, (err, hash) => {
         ShoppingList.create({
             name: req.body.name,
-            list: '{}',
+            list: '{"data": []}',
             password: hash
         }).then((response) => {
             res.json({
@@ -81,10 +81,30 @@ app.post('/createList', function (req, res) {
 
 app.post('/addElement', function (req, res) {
     ShoppingList.findByPk(req.body.id).then(list => {
-        bcrypt.compare(req.body.password, list.password, function(error, response) {
+        bcrypt.compare(req.body.password, list.password, (error, response) => {
             if(response){
                 // TODO update list, then send answer
-                res.send(list.list);
+                let data = JSON.parse(list.list);
+                data = data.data;
+                let nameAlreadyExists = false;
+                data.forEach(element => {
+                    if(element.name.toLowerCase() == req.body.item ){
+                        nameAlreadyExists = true;
+                    }
+                });
+                
+                if(!nameAlreadyExists){
+                    data.push({name: req.body.item, active: false});
+                    list.update({
+                        list: JSON.stringify({data: data})
+                    }).then(
+                        res.json(data)
+                    )
+
+                } else {
+                    res.json(data);
+                }
+                
             } else {
 
                 res.status(401).json({error: 'Invalid password'});
