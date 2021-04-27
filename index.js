@@ -83,7 +83,6 @@ app.post('/addElement', function (req, res) {
     ShoppingList.findByPk(req.body.id).then(list => {
         bcrypt.compare(req.body.password, list.password, (error, response) => {
             if(response){
-                // TODO update list, then send answer
                 let data = JSON.parse(list.list);
                 data = data.data;
                 let nameAlreadyExists = false;
@@ -118,10 +117,30 @@ app.post('/addElement', function (req, res) {
 
 app.post('/updateElement', function (req, res) {
     ShoppingList.findByPk(req.body.id).then(list => {
-        bcrypt.compare(req.body.password, list.password, function(error, response) {
+        bcrypt.compare(req.body.password, list.password, (error, response) => {
             if(response){
                 // TODO update list, then send answer
-                res.send(list.list);
+                let data = JSON.parse(list.list);
+                data = data.data;
+                let needToUpdate = false;
+                
+                data.forEach(element => {
+                    if(element.name.toLowerCase() == req.body.item ){
+                        needToUpdate = true;
+                        element.active = req.body.active
+                    }
+                });                
+                if(needToUpdate){
+                    list.update({
+                        list: JSON.stringify({data: data})
+                    }).then(
+                        res.json(data)
+                    )
+
+                } else {
+                    res.json(data);
+                }
+                
             } else {
 
                 res.status(401).json({error: 'Invalid password'});
