@@ -99,11 +99,11 @@ app.post('/addElement', function (req, res) {
                     list.update({
                         list: JSON.stringify({data: data})
                     }).then(
-                        res.json(data)
+                        res.json({data: data})
                     )
 
                 } else {
-                    res.json(data);
+                    res.json({data: data});
                 }
                 
             } else {
@@ -136,11 +136,11 @@ app.post('/updateElement', function (req, res) {
                     list.update({
                         list: JSON.stringify({data: data})
                     }).then(
-                        res.json(data)
+                        res.json({data: data})
                     )
 
                 } else {
-                    res.json(data);
+                    res.json({data: data});
                 }
                 
             } else {
@@ -174,11 +174,11 @@ app.post('/removeElement', function (req, res) {
                     list.update({
                         list: JSON.stringify({data: data})
                     }).then(
-                        res.json(data)
+                        res.json({data: data})
                     )
 
                 } else {
-                    res.json(data);
+                    res.json({data: data});
                 }
                 
             } else {
