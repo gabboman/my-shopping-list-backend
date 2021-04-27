@@ -89,7 +89,7 @@ app.post('/addElement', function (req, res) {
                 data = data.data;
                 let nameAlreadyExists = false;
                 data.forEach(element => {
-                    if(element.name.toLowerCase() == req.body.item ){
+                    if(element.name.toLowerCase() == req.body.item.toLowerCase() ){
                         nameAlreadyExists = true;
                     }
                 });
@@ -127,12 +127,13 @@ app.post('/updateElement', function (req, res) {
                 let needToUpdate = false;
                 
                 data.forEach(element => {
-                    if(element.name.toLowerCase() == req.body.item ){
+                    if(element.name.toLowerCase() == req.body.item.toLowerCase() ){
                         needToUpdate = true;
-                        element.active = req.body.active
+                        element.active = req.body.active == 'true'
                     }
                 });                
                 if(needToUpdate){
+                    console.log(data)
                     list.update({
                         list: JSON.stringify({data: data})
                     }).then(
@@ -163,7 +164,7 @@ app.post('/removeElement', function (req, res) {
                 let needUpdate = false;
                 let index;
                 data.forEach((element, i) => {
-                    if(element.name.toLowerCase() == req.body.item ){
+                    if(element.name.toLowerCase() == req.body.item.toLowerCase() ){
                         needUpdate = true;
                         index = i;
                     }
