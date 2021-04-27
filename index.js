@@ -6,8 +6,11 @@ const bodyParser = require('body-parser');
 app.use(bodyParser.json());
 var multer = require('multer');
 var upload = multer();
-app.use(upload.array()); 
+app.use(upload.array());
 app.use(express.static('public'));
+
+const bcrypt = require('bcrypt');
+const saltRounds = 10;
 
 const Sequelize = require('sequelize');
 const sequelize = new Sequelize({
@@ -41,32 +44,54 @@ sequelize
 
 app.get('/', (req, res) => res.send('Shopping list backend'));
 
-app.get('/list/:id', function (req, res) {
-    ShoppingList.findByPk(req.params.id).then(list => res.json(list));
-});
 
 app.post('/getList', function (req, res) {
+
+
+    ShoppingList.findByPk(req.body.id).then(list => {
+        bcrypt.compare(req.body.password, list.password, function(error, response) {
+            if(response){
+                res.json({
+                })
+            } else {
+
+                res.status(401).json({error: 'Invalid password'});
+            }
+        }); 
     
-    res.json({})
+    }).catch(error => {
+        res.status(404).json({error: 'List not found'});
+    });
+
 });
 
 app.post('/createList', function (req, res) {
     
-    res.json({})
+    bcrypt.hash(req.body.password, saltRounds, (err, hash) => {
+        ShoppingList.create({
+            name: req.body.name,
+            list: '{}',
+            password: hash
+        }).then((response) => {
+            res.json({
+                newListId: response.id
+            })
+        });
+      });
 });
 
 app.post('/addElement', function (req, res) {
-    
+
     res.json({})
 });
 
 app.post('/updateElement', function (req, res) {
-    
+
     res.json({})
 });
 
 app.post('/removeElement', function (req, res) {
-    
+
     res.json({})
 });
 
