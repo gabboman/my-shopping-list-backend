@@ -51,8 +51,7 @@ app.post('/getList', function (req, res) {
     ShoppingList.findByPk(req.body.id).then(list => {
         bcrypt.compare(req.body.password, list.password, function(error, response) {
             if(response){
-                res.json({
-                })
+                res.send(list.list);
             } else {
 
                 res.status(401).json({error: 'Invalid password'});
@@ -81,18 +80,54 @@ app.post('/createList', function (req, res) {
 });
 
 app.post('/addElement', function (req, res) {
+    ShoppingList.findByPk(req.body.id).then(list => {
+        bcrypt.compare(req.body.password, list.password, function(error, response) {
+            if(response){
+                // TODO update list, then send answer
+                res.send(list.list);
+            } else {
 
-    res.json({})
+                res.status(401).json({error: 'Invalid password'});
+            }
+        }); 
+    
+    }).catch(error => {
+        res.status(404).json({error: 'List not found'});
+    });
 });
 
 app.post('/updateElement', function (req, res) {
+    ShoppingList.findByPk(req.body.id).then(list => {
+        bcrypt.compare(req.body.password, list.password, function(error, response) {
+            if(response){
+                // TODO update list, then send answer
+                res.send(list.list);
+            } else {
 
-    res.json({})
+                res.status(401).json({error: 'Invalid password'});
+            }
+        }); 
+    
+    }).catch(error => {
+        res.status(404).json({error: 'List not found'});
+    });
 });
 
 app.post('/removeElement', function (req, res) {
+    ShoppingList.findByPk(req.body.id).then(list => {
+        bcrypt.compare(req.body.password, list.password, function(error, response) {
+            if(response){
+                // TODO update list, then send answer
+                res.send(list.list);
+            } else {
 
-    res.json({})
+                res.status(401).json({error: 'Invalid password'});
+            }
+        }); 
+    
+    }).catch(error => {
+        res.status(404).json({error: 'List not found'});
+    });
 });
 
 
