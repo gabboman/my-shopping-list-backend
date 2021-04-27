@@ -11,6 +11,8 @@ app.use(express.static('public'));
 
 const bcrypt = require('bcrypt');
 const saltRounds = 10;
+var cors = require('cors');
+app.use(cors());
 
 const Sequelize = require('sequelize');
 const sequelize = new Sequelize({
