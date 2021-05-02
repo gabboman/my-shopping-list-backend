@@ -66,6 +66,26 @@ app.post('/getList', function (req, res) {
 
 });
 
+
+app.post('/authorizeList', function (req, res) {
+
+
+    ShoppingList.findByPk(req.body.id).then(list => {
+        bcrypt.compare(req.body.password, list.password, function(error, response) {
+            if(response){
+                res.send({name: list.name, id: list.id});
+            } else {
+
+                res.status(401).json({error: 'Invalid password'});
+            }
+        }); 
+    
+    }).catch(error => {
+        res.status(404).json({error: 'List not found'});
+    });
+
+});
+
 app.post('/createList', function (req, res) {
     
     bcrypt.hash(req.body.password, saltRounds, (err, hash) => {
