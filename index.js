@@ -153,7 +153,6 @@ app.post('/updateElement', function (req, res) {
                     }
                 });                
                 if(needToUpdate){
-                    console.log(data)
                     list.update({
                         list: JSON.stringify({data: data})
                     }).then(
